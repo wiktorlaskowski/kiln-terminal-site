@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiln Terminal — a modern GTK4 terminal</title>
+<meta name="description" content="Kiln Terminal is a GTK4 / libadwaita terminal emulator built on VTE. Multi-shell tabs, split panes, system dark-mode, and native GNOME look.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="#top" aria-label="Kiln Terminal home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="2" y="5" width="28" height="22" rx="4" fill="currentColor" opacity=".12"/>
+        <rect x="2" y="5" width="28" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 12l5 4-5 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">Kiln Terminal</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="#shortcuts">Shortcuts</a>
+      <a href="#build">Build</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">Version 1.2.0 &middot; MIT License</span>
+      <h1>A modern GTK4 terminal that feels at home on GNOME.</h1>
+      <p class="lede">
+        Kiln Terminal is a native C++ terminal emulator built on
+        <strong>GTK4</strong>, <strong>libadwaita</strong>, and
+        <strong>VTE</strong>. It detects every shell on your system,
+        opens them in tabs or split panes, and follows your system's
+        dark&#8209;mode preference out of the box.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#install">Install</a>
+        <a class="btn btn-ghost" href="#build">Build from source</a>
+      </div>
+      <p class="platform-note">
+        Built and tested on Ubuntu&nbsp;24.04 / Linux&nbsp;Mint&nbsp;22 (noble).
+      </p>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <img class="hero-image" src="kilnexample.png"
+           alt="Screenshot of Kiln Terminal with tabs and a split pane">
+    </div>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <div class="container">
+    <h2>What it does</h2>
+    <div class="feature-grid">
+
+      <article class="feature">
+        <h3>Multi-shell new-tab button</h3>
+        <p>
+          A split&nbsp;button in the header bar opens a menu of every shell
+          found in <code>/etc/shells</code> and the usual locations
+          (<code>bash</code>, <code>zsh</code>, <code>fish</code>,
+          <code>dash</code>, <code>tmux</code>, <code>nushell</code>,
+          &hellip;). Pick one per tab.
+        </p>
+      </article>
+
+      <article class="feature">
+        <h3>Horizontal &amp; vertical splits</h3>
+        <p>
+          Slice a tab into panes with
+          <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd> or
+          <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd>. Close a pane and
+          the remaining one reclaims the space automatically.
+        </p>
+      </article>
+
+      <article class="feature">
+        <h3>Right-click menu</h3>
+        <p>
+          Copy, paste, select all, split, open a new tab, or close the
+          pane &mdash; all from a native <code>GtkPopoverMenu</code>
+          anchored to the click location.
+        </p>
+      </article>
+
+      <article class="feature">
+        <h3>Follows the system theme</h3>
+        <p>
+          Uses <code>AdwStyleManager</code> to track GNOME's light/dark
+          preference live. Palette and background are swapped at runtime
+          &mdash; no restart, no theme file to tweak.
+        </p>
+      </article>
+
+      <article class="feature">
+        <h3>Spawns proper login shells</h3>
+        <p>
+          Each tab is spawned with
+          <code>G_SPAWN_FILE_AND_ARGV_ZERO</code> so
+          <code>argv[0]</code> is <code>-bash</code>,
+          <code>-zsh</code>, etc. Your rc&nbsp;files run exactly the way
+          they do from a TTY.
+        </p>
+      </article>
+
+      <article class="feature">
+        <h3>Inherits the current working directory</h3>
+        <p>
+          New tabs and split panes open in the focused shell's foreground
+          process's cwd, so <code>cd</code>-ing somewhere and hitting
+          new-tab keeps you there.
+        </p>
+      </article>
+
+      <article class="feature">
+        <h3>Defensive shell validation</h3>
+        <p>
+          Shell paths are validated before spawn: absolute path only,
+          no control characters, and the target must match something
+          the detector found. A shell uninstalled between menu build
+          and click falls back to the user's default.
+        </p>
+      </article>
+
+      <article class="feature">
+        <h3>Debian package &amp; APT index</h3>
+        <p>
+          Ships as a hardened <code>.deb</code> built with
+          <code>debhelper</code>&nbsp;13 and
+          <code>hardening=+all</code>. A <code>Packages.gz</code> is
+          generated so you can host it as a flat APT repo.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="install" class="install">
+  <div class="container">
+    <h2>Install</h2>
+    <p class="section-lede">
+      Grab the <code>.deb</code> and install it, or add the APT repo
+      where it's hosted to get updates.
+    </p>
+
+    <div class="install-grid">
+
+      <div class="card">
+        <h3>Direct <code>.deb</code></h3>
+<pre><code>sudo apt install ./kiln-terminal_1.2.0-1_amd64.deb</code></pre>
+        <p class="muted">
+          Uses your system's package manager to resolve GTK4,
+          libadwaita-1, and VTE runtime deps.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Via the APT repo</h3>
+<pre><code>echo "deb [trusted=yes] https://wiktorlaskowski.github.io/kiln-terminal/ ./" \
+  | sudo tee /etc/apt/sources.list.d/kiln.list
+sudo apt update
+sudo apt install kiln-terminal</code></pre>
+        <p class="muted">
+          Hosted on GitHub Pages as a flat APT repo
+          (<code>Packages.gz</code> at the root).
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Uninstall</h3>
+<pre><code>sudo apt remove kiln-terminal</code></pre>
+        <p class="muted">
+          Or run <code>./install.sh --uninstall</code> if you
+          installed from source.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="shortcuts" class="shortcuts">
+  <div class="container">
+    <h2>Keyboard shortcuts</h2>
+    <div class="shortcut-table" role="table" aria-label="Default keyboard shortcuts">
+      <div class="row head" role="row">
+        <span role="columnheader">Action</span>
+        <span role="columnheader">Shortcut</span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">New tab (default shell)</span>
+        <span role="cell"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd></span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">Close tab / pane</span>
+        <span role="cell"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>W</kbd></span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">Copy</span>
+        <span role="cell"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">Paste</span>
+        <span role="cell"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">Select all</span>
+        <span role="cell"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd></span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">Split horizontally (right)</span>
+        <span role="cell"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd></span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">Split vertically (down)</span>
+        <span role="cell"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">Zoom in / out / reset</span>
+        <span role="cell">
+          <kbd>Ctrl</kbd>+<kbd>+</kbd> &middot;
+          <kbd>Ctrl</kbd>+<kbd>-</kbd> &middot;
+          <kbd>Ctrl</kbd>+<kbd>0</kbd>
+        </span>
+      </div>
+      <div class="row" role="row">
+        <span role="cell">Quit</span>
+        <span role="cell"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="build" class="build">
+  <div class="container">
+    <h2>Build from source</h2>
+    <p class="section-lede">
+      Kiln Terminal builds with plain CMake and pkg-config. No vendored
+      dependencies, no extra toolchain.
+    </p>
+
+    <div class="build-grid">
+      <div>
+        <h3>Dependencies</h3>
+        <ul class="dep-list">
+          <li><code>cmake</code> &#8805; 3.20</li>
+          <li><code>pkg-config</code></li>
+          <li><code>libgtk-4-dev</code></li>
+          <li><code>libadwaita-1-dev</code></li>
+          <li><code>libvte-2.91-gtk4-dev</code></li>
+          <li>A C++20 compiler</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Commands</h3>
+<pre><code>git clone -b Source https://github.com/wiktorlaskowski/kiln-terminal.git
+cd kiln-terminal
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
+./build/kiln-terminal</code></pre>
+        <p class="muted">
+          To build a <code>.deb</code> instead, run
+          <code>./build-deb.sh</code>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <span class="brand-name">Kiln Terminal</span>
+      <p class="muted small">
+        Released under the MIT License. GTK, libadwaita, and VTE are
+        trademarks of their respective owners.
+      </p>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="#shortcuts">Shortcuts</a>
+      <a href="#build">Build</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
